@@ -1,9 +1,20 @@
 {
-  "extends": "@tsconfig/node20/tsconfig.json",
-  "compilerOptions": {
-    "rootDir": "backend/src",
-    "outDir": "./dist"
-  },
-  "include": ["backend/src/**/*", "backend/src/@types"],
-  "exclude": ["node_modules"]
+    "extends": "@tsconfig/node20/tsconfig.json",
+    "compilerOptions": {
+        // Define the base directory for module resolution
+        "baseUrl": ".",
+        "outDir": "./dist",
+        "rootDir": "./backend/src",
+
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "skipLibCheck": true
+    },
+    // Be explicit about which files to include in the compilation
+    "include": [
+        "backend/src/**/*", // All TypeScript files
+        "backend/src/@types" // Explicitly include all declaration files
+    ],
+    "exclude": ["node_modules", "dist"]
 }

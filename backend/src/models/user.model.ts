@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Document, Schema, Types } from "mongoose";
 import bcrypt from "bcryptjs";
 
 interface IUser {
@@ -16,7 +16,7 @@ interface UserMethods {
     comparePassowords(password: string): Promise<boolean>;
     omitPassword(): Omit<IUser, "password">;
 }
-export interface UserDocument extends IUser, UserMethods {}
+export interface UserDocument extends IUser, UserMethods, Document {}
 
 const userSchema = new mongoose.Schema<UserDocument>(
     {

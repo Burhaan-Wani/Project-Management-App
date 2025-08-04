@@ -4,10 +4,14 @@ import config from "../config/app.config";
 import { UserDocument } from "../models/user.model";
 import z from "zod";
 import { registerSchema } from "../validations/auth.validations";
-import { registerAccountService } from "../services/auth.services";
+import {
+    getMeService,
+    registerAccountService,
+} from "../services/auth.services";
 import { AppError } from "../utils/AppError";
 import { HTTPSTATUS } from "../config/http.config";
 import passport from "passport";
+import { Types } from "mongoose";
 
 export const googleLoginCallback = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -84,5 +88,35 @@ export const localLoginController = asyncHandler(
                 });
             }
         )(req, res, next);
+    }
+);
+
+export const logout = asyncHandler(
+    (req: Request, res: Response, next: NextFunction) => {
+        req.logOut(err => {
+            if (err) {
+                return next(new AppError("Failed to logout.", 400));
+            }
+        });
+        req.session = null;
+        res.status(HTTPSTATUS.OK).json({
+            status: "success",
+            message: "Logout successful",
+        });
+    }
+);
+
+export const me = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const userId = (req.user as UserDocument)._id as Types.ObjectId;
+
+        const { user } = await getMeService(userId);
+
+        res.status(HTTPSTATUS.OK).json({
+            status: "success",
+            data: {
+                user,
+            },
+        });
     }
 );

@@ -8,6 +8,8 @@ const handleDevError = (error: AppError, res: Response) => {
     return res.status(error.statusCode).json({
         status: error.status,
         message: error.message,
+        error,
+        stack: error.stack,
     });
 };
 

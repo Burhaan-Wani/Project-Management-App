@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { ProviderEnum, ProviderEnumType } from "../enums/account-provider.enum";
 import User from "../models/user.model";
 import Account from "../models/account.model";
@@ -207,4 +207,16 @@ export const loginService = async function (data: LocalLoginData) {
     } catch (error) {
         throw error;
     }
+};
+
+export const getMeService = async function (userId: Types.ObjectId) {
+    const user = await User.findById(userId)
+        .populate("currentWorkspace")
+        .select("-password");
+
+    if (!user) {
+        throw new AppError("User not found", 404);
+    }
+
+    return { user };
 };
